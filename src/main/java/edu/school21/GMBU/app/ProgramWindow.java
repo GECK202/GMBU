@@ -28,12 +28,10 @@ public class ProgramWindow extends Game implements ApplicationListener, InputPro
     private String pause = "error";
     private String check = "error";
 
-
     private final float updateDelay = 1/30.0f;
 
     private Pixmap pm;
     private Texture tx;
-
 
     private ClockGenerator cg;
 
@@ -47,6 +45,7 @@ public class ProgramWindow extends Game implements ApplicationListener, InputPro
 
     @Override
     public void create() {
+        ClockGenerator.goFlag=true;
         maxAddr = String.format("%d",100000);//em.getMaxAddress());
         batch = new SpriteBatch();
         font = new BitmapFont();
@@ -66,7 +65,8 @@ public class ProgramWindow extends Game implements ApplicationListener, InputPro
                         curOppcode = cpu.getAss();
                         debugMode = String.format("%b", cg.getDebugMode());
                         pause = String.format("%b", cg.getPause());
-                        check = String.format("%d", cg.getNnn());
+                        check = String.format("%d", cg.getCounter());
+
                     } catch (Exception e) {
                         //System.err.print(e);
                     }
@@ -117,18 +117,18 @@ public class ProgramWindow extends Game implements ApplicationListener, InputPro
         font.draw(batch, "check = ", 300, 425);
         font.draw(batch, check, 355, 425);
 
-
         batch.draw(tx, 10,10, 600, 300);
         batch.end();
     }
 
     @Override
     public void dispose() {
+        ClockGenerator.exitFlag = true;
         pm.dispose();
         tx.dispose();
         batch.dispose();
         font.dispose();
-        cg.setExitFlag();
+
     }
 
     @Override

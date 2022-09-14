@@ -217,7 +217,7 @@ public class CPU {
 		//Memory m = Memory.getShared();
 		byte opcode = memory.read((short) PC);
 		curCode = opname[Byte.toUnsignedInt(opcode)];
-		System.out.printf("PC = %d opcode = %x name = %s\n", PC, opcode, curName);
+		//System.out.printf("PC = %d opcode = %x name = %s\n", PC, opcode, curName);
 		curCode.func.exec(curCode.index);
 		if (localCount < curCode.duration) {
 			//System.out.printf(" -   %02d\n", CPU.localCount);

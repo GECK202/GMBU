@@ -9,6 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 
 public class Main {
 
@@ -19,7 +22,9 @@ public class Main {
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(
                 SpringConfig.class);
 
-
+        Path currentRelativePath = Paths.get("");
+        String s = currentRelativePath.toAbsolutePath().toString();
+        System.out.println("Current absolute path is: " + s);
 
         CPU cpu = context.getBean("CPU", CPU.class);
         Memory memory = context.getBean("memory", Memory.class);

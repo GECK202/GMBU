@@ -13,12 +13,14 @@ public class ClockGenerator implements Runnable {
 
     private long secForMillion = 0;
     private int clockParameter = 0;
-    private boolean exitFlag = false;
+    public static boolean exitFlag = false;
+    public static boolean goFlag = false;
 
-    private boolean pause = false;
+
+    private boolean pause = true;
     private boolean debugMode = false;
     private boolean debugGo = true;
-    private int nnn = 0;
+    private int counter = 0;
 
     public int px = 1;
     public int py = 1;
@@ -37,7 +39,7 @@ public class ClockGenerator implements Runnable {
     }
 
     public void loadCartridge() {
-        String filename = "D://Downloads//Army_Men_2//Army.gbc";
+        String filename = ".//roms//Army_Men_2//Army.gbc";
         memory.loadCartridge(filename);
     }
 
@@ -46,15 +48,23 @@ public class ClockGenerator implements Runnable {
         return clockParameter;
     }
 
-    public void setExitFlag() {
-        exitFlag = true;
-    }
+    //public void setExitFlag() {
+    //    exitFlag = true;
+    //}
+
+    //public void setGoFlag(boolean goFlag) {
+    //    this.goFlag = goFlag;
+    //}
+
+    //public boolean getGoFlag() {
+    //    return goFlag;
+    //}
 
     public boolean getPause() { return pause; }
 
     public boolean getDebugMode() { return debugMode; }
 
-    public int getNnn() { return nnn; }
+    public int getCounter() { return counter; }
 
     public void invertPause() {
         if (debugMode) {
@@ -75,33 +85,33 @@ public class ClockGenerator implements Runnable {
         System.out.printf("IN NEW THREAD");
         boolean flag;
 
-        while (!exitFlag) {
-            nnn += 1;
-            //System.out.printf("clock = %d, debug = %b, pause = %b \n", clockParameter, debugMode, pause);
-            if (secForMillion > 0 && !pause) {
+        while (!ClockGenerator.exitFlag) {
+                counter++;
+                //System.out.printf("clock = %d, debug = %b, pause = %b \n", clockParameter, debugMode, pause);
+                if (secForMillion > 0 && !pause) {
 
-                if (!debugMode || (debugMode && debugGo)) {
-                    clockParameter++;
-                    flag = cpu.update();
+                    if (!debugMode || (debugMode && debugGo)) {
+                        clockParameter++;
+                        flag = cpu.update();
 
-                    if (clockParameter % 1000 == 0) {
-                        px = px + dx;
-                        py = py + dy;
-                        dx = px < 199 ? px > 1 ? dx : -dx : -dx;
-                        dy = py < 99 ? py > 1 ? dy : -dy : -dy;
+                        if (clockParameter % 1000 == 0) {
+                            px = px + dx;
+                            py = py + dy;
+                            dx = px < 199 ? px > 1 ? dx : -dx : -dx;
+                            dy = py < 99 ? py > 1 ? dy : -dy : -dy;
+                        }
+
+                        ClockGenerator.exitFlag = !flag;
+                        debugGo = false;
                     }
-
-                    exitFlag = !flag;
-                    debugGo = false;
+                }
+                if (clockParameter % secForMillion == 0 || debugMode) {
+                    try {
+                        Thread.sleep(1);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
-            if (clockParameter%secForMillion == 0 || debugMode) {
-                try {
-                    Thread.sleep(1);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
     }
 }
