@@ -12,7 +12,6 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Timer;
 import edu.school21.GMBU.emulator.CPU;
-import edu.school21.GMBU.emulator.Emulator;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class ProgramWindow extends Game implements ApplicationListener, InputProcessor {
@@ -71,14 +70,27 @@ public class ProgramWindow extends Game implements ApplicationListener, InputPro
                         //System.err.print(e);
                     }
                 }
-                pm.setColor(new Color(0,0.5f,0,1));
+
                 for(int i = 0; i<200; i++) {
                     for (int j = 0; j<100; j++) {
+                        switch (cg.screen[i][j]) {
+                            case 0:
+                                pm.setColor(new Color(0,1.0f,0,1));
+                                break;
+                            case 1:
+                                pm.setColor(0,0.8f,0,1);
+                                break;
+                            case 2:
+                                pm.setColor(new Color(0,0.6f,0,1));
+                                break;
+                            default:
+                                pm.setColor(0,0.4f,0,1);
+                        }
                         pm.drawPixel(i,j);
                     }
                 }
-                pm.setColor(0,1,0,1);
-                pm.drawPixel(cg.px,cg.py);
+
+                //pm.drawPixel(cg.px,cg.py);
                 tx.draw(pm,0,0);
             }
         },0,updateDelay);

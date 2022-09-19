@@ -5,8 +5,6 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import edu.school21.GMBU.SpringConfig;
 import edu.school21.GMBU.emulator.CPU;
 import edu.school21.GMBU.emulator.Memory.Memory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.nio.file.Path;

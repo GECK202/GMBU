@@ -1,12 +1,13 @@
 package edu.school21.GMBU.emulator;
 
 import edu.school21.GMBU.emulator.Memory.Memory;
+import edu.school21.GMBU.emulator.Register;
+import edu.school21.GMBU.emulator.RegisterByte;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class CPU {
-
 
 	private int PC = 4;
 	private int SP;
@@ -184,6 +185,8 @@ public class CPU {
 			setCFlag(cFlag);
 		});
 
+
+
 		for (int i = 10; i < 256; i++) {
 			opname[i] = new Opcode(1, 4, i, (index)-> {
 				curName = String.format("0x%02x: COMMAND", index);
@@ -217,8 +220,9 @@ public class CPU {
 		//Memory m = Memory.getShared();
 		byte opcode = memory.read(PC);
 		curCode = opname[Byte.toUnsignedInt(opcode)];
-		System.out.printf("PC = %d opcode = %x name = %s\n", PC, opcode, curName);
+
 		curCode.func.exec(curCode.index);
+		System.out.printf("PC = %d opcode = %x name = %s\n", PC, opcode, curName);
 		if (localCount < curCode.duration) {
 			//System.out.printf(" -   %02d\n", CPU.localCount);
 			localCount += 4;
