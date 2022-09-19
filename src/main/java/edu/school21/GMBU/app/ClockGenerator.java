@@ -17,7 +17,7 @@ public class ClockGenerator implements Runnable {
     public static boolean goFlag = false;
 
 
-    private boolean pause = true;
+    private boolean pause = false;
     private boolean debugMode = false;
     private boolean debugGo = true;
     private int counter = 0;

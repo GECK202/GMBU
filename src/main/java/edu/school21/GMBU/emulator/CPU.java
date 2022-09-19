@@ -111,9 +111,9 @@ public class CPU {
 
 			//Memory m = Memory.getShared();
 			curName = "0x01: LD BC,d16";
-            byte srcL = memory.read((short) PC);
+            byte srcL = memory.read(PC);
             PC++;
-            byte srcH = memory.read((short) PC);
+            byte srcH = memory.read(PC);
             PC++;
             LDHL(BC, srcL, srcH);
 		});
@@ -144,7 +144,7 @@ public class CPU {
 			//Memory m = Memory.getShared();
 			curName = "0x06: LD B d8";
 
-			byte value = memory.read((short) PC);
+			byte value = memory.read(PC);
 			PC++;
 			LD(BC, RegisterByte.HIGH, value);
 		});
@@ -166,9 +166,9 @@ public class CPU {
 		opname[0x08] = new Opcode(3,20,8, (index)-> {
 			//Memory m = Memory.getShared();
 			curName = "0x08: LD (a16) SP";
-			short value = memory.read((short)PC);
+			short value = memory.read(PC);
 			PC++;
-			value |= ((short)memory.read((short)PC))<<8;
+			value |= ((short)memory.read(PC))<<8;
 			PC++;
 			memory.writeWord(SP, value);
 		});
@@ -211,13 +211,13 @@ public class CPU {
 	private static int localCount = 1;
 
 	public boolean update() {
-		if (PC == 15083) {
+		if (PC == 17078) {
 			int j = 100; ///заглушка для ловли багов
 		}
 		//Memory m = Memory.getShared();
-		byte opcode = memory.read((short) PC);
+		byte opcode = memory.read(PC);
 		curCode = opname[Byte.toUnsignedInt(opcode)];
-		//System.out.printf("PC = %d opcode = %x name = %s\n", PC, opcode, curName);
+		System.out.printf("PC = %d opcode = %x name = %s\n", PC, opcode, curName);
 		curCode.func.exec(curCode.index);
 		if (localCount < curCode.duration) {
 			//System.out.printf(" -   %02d\n", CPU.localCount);
