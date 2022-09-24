@@ -1,6 +1,6 @@
 package edu.school21.GMBU.app;
 
-import edu.school21.GMBU.emulator.CPU;
+import edu.school21.GMBU.emulator.CPU.CPU;
 import edu.school21.GMBU.emulator.Memory.Memory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -10,7 +10,7 @@ public class ClockGenerator implements Runnable {
 
     //private static ClockGenerator shared = null;
 
-    private long secForMillion = 0;
+    private final long secForMillion;
     private int clockParameter = 0;
     public static boolean exitFlag = false;
     public static boolean goFlag = false;
@@ -20,7 +20,6 @@ public class ClockGenerator implements Runnable {
     private boolean debugMode = false;
     private boolean debugGo = true;
     private int counter = 0;
-
     private int px = 1;
     private int py = 1;
     private int dx = 1;
@@ -29,14 +28,16 @@ public class ClockGenerator implements Runnable {
     public int[][] screen = new int[200][100];
 
 
-    private CPU cpu;
-    private Memory memory;
+    private final CPU cpu;
+    private final Memory memory;
 
     @Autowired
     public ClockGenerator(CPU cpu, Memory memory) {
-        this.secForMillion = 1200/20;
+        this.secForMillion = 60;
         this.cpu = cpu;
         this.memory = memory;
+        loadCartridge();
+        new Thread(this).start();
     }
 
     public void loadCartridge() {
@@ -48,18 +49,6 @@ public class ClockGenerator implements Runnable {
     public int getClockParameter() {
         return clockParameter;
     }
-
-    //public void setExitFlag() {
-    //    exitFlag = true;
-    //}
-
-    //public void setGoFlag(boolean goFlag) {
-    //    this.goFlag = goFlag;
-    //}
-
-    //public boolean getGoFlag() {
-    //    return goFlag;
-    //}
 
     public boolean getPause() { return pause; }
 
@@ -148,23 +137,21 @@ public class ClockGenerator implements Runnable {
 
     @Override
     public void run() {
-        System.out.printf("IN NEW THREAD");
+        System.out.println("IN NEW THREAD");
         boolean flag;
         clearScreen();
         drawPause(0,0);
         while (!ClockGenerator.exitFlag) {
+            System.out.println(counter);
                 counter++;
                 //System.out.printf("clock = %d, debug = %b, pause = %b \n", clockParameter, debugMode, pause);
                 if (secForMillion > 0 && !pause) {
-
                     if (!debugMode || (debugMode && debugGo)) {
                         clockParameter++;
                         flag = cpu.update();
-
                         if (clockParameter % 1000 == 0) {
                             drawBall();
                         }
-
                         ClockGenerator.exitFlag = !flag;
                         debugGo = false;
                     }

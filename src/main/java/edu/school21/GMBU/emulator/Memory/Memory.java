@@ -46,11 +46,9 @@ public class Memory {
     @Autowired
     private RomLoader romLoader;
 
-
     public Memory() {
         memory = new byte[0xFFFF];
         this.Reset(true);
-
     }
 
     boolean CGB;

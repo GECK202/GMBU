@@ -1,6 +1,4 @@
-package edu.school21.GMBU.emulator;
-
-enum RegisterByte { HIGH, LOW }
+package edu.school21.GMBU.emulator.CPU;
 
 public class Register {
     private short reg;

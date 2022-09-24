@@ -11,41 +11,60 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Timer;
-import edu.school21.GMBU.emulator.CPU;
+import edu.school21.GMBU.emulator.CPU.CPU;
+import edu.school21.GMBU.emulator.Memory.Memory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+
+@Component
 public class ProgramWindow extends Game implements ApplicationListener, InputProcessor {
     private SpriteBatch batch;
     private BitmapFont font;
     private int currentFrame = 1;
     private boolean flag = false;
     private String clockS = "error";
-    private String curOppcode = "error";
-    private String maxAddr = "error";
+    private String curOpcodeName = "error";
+    private String maxAddress = "error";
 
     private String debugMode = "error";
     private String pause = "error";
     private String check = "error";
+
+    private String mem = "error";
 
     private final float updateDelay = 1/30.0f;
 
     private Pixmap pm;
     private Texture tx;
 
-    private ClockGenerator cg;
+    private final ClockGenerator cg;
 
-    private CPU cpu;
+    private final CPU cpu;
+    private final Memory memory;
 
     @Autowired
-    public ProgramWindow(ClockGenerator cg, CPU cpu) {
+    public ProgramWindow(ClockGenerator cg, CPU cpu, Memory memory) {
         this.cg = cg;
         this.cpu = cpu;
+        this.memory = memory;
+    }
+
+    private String getMemory(int address) {
+        String s = "";
+        for (int j = 0; j < 16; j++) {
+            for (int i = 0; i < 16; i++){
+                s += String.format("%-3X ",Byte.toUnsignedInt(memory.read(address + (j*16) + i)));
+            }
+            s += "\n";
+        }
+        return s;
     }
 
     @Override
     public void create() {
         ClockGenerator.goFlag=true;
-        maxAddr = String.format("%d",100000);//em.getMaxAddress());
+        maxAddress = String.format("%d",100000);//em.getMaxAddress());
         batch = new SpriteBatch();
         font = new BitmapFont();
         font.setColor(Color.GREEN);
@@ -61,11 +80,11 @@ public class ProgramWindow extends Game implements ApplicationListener, InputPro
                     currentFrame++;
                     flag = true;
                     try {
-                        curOppcode = cpu.getAss();
+                        curOpcodeName = cpu.getAss();
                         debugMode = String.format("%b", cg.getDebugMode());
                         pause = String.format("%b", cg.getPause());
                         check = String.format("%d", cg.getCounter());
-
+                        mem = getMemory(0);
                     } catch (Exception e) {
                         //System.err.print(e);
                     }
@@ -115,19 +134,21 @@ public class ProgramWindow extends Game implements ApplicationListener, InputPro
         font.draw(batch,  clockS, 130, 450);
 
         font.draw(batch, "Max address:", 5, 425);
-        font.draw(batch, maxAddr, 130, 425);
+        font.draw(batch, maxAddress, 130, 425);
 
-        font.draw(batch, "Current oppcode:", 5, 400);
-        font.draw(batch,  curOppcode, 130, 400);
+        font.draw(batch, "Current opcode:", 5, 400);
+        font.draw(batch,  curOpcodeName, 130, 400);
 
-        font.draw(batch, "debug = ", 300, 475);
-        font.draw(batch, debugMode, 355, 475);
+        font.draw(batch, "debug = ", 200, 475);
+        font.draw(batch, debugMode, 255, 475);
 
-        font.draw(batch, "pause = ", 300, 450);
-        font.draw(batch, pause, 355, 450);
+        font.draw(batch, "pause = ", 200, 450);
+        font.draw(batch, pause, 255, 450);
 
-        font.draw(batch, "check = ", 300, 425);
-        font.draw(batch, check, 355, 425);
+        font.draw(batch, "check = ", 200, 425);
+        font.draw(batch, check, 255, 425);
+
+        font.draw(batch, mem, 300, 675);
 
         batch.draw(tx, 10,10, 600, 300);
         batch.end();
