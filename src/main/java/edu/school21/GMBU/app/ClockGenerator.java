@@ -142,29 +142,29 @@ public class ClockGenerator implements Runnable {
         clearScreen();
         drawPause(0,0);
         while (!ClockGenerator.exitFlag) {
-            System.out.println(counter);
-                counter++;
-                //System.out.printf("clock = %d, debug = %b, pause = %b \n", clockParameter, debugMode, pause);
-                if (secForMillion > 0 && !pause) {
-                    if (!debugMode || (debugMode && debugGo)) {
-                        clockParameter++;
-                        flag = cpu.update();
-                        if (clockParameter % 1000 == 0) {
-                            drawBall();
-                        }
-                        ClockGenerator.exitFlag = !flag;
-                        debugGo = false;
+            //System.out.println(counter);
+            counter++;
+            //System.out.printf("clock = %d, debug = %b, pause = %b \n", clockParameter, debugMode, pause);
+            if (secForMillion > 0 && !pause) {
+                if (!debugMode || (debugMode && debugGo)) {
+                    clockParameter++;
+                    flag = cpu.update();
+                    if (clockParameter % 1000 == 0) {
+                        drawBall();
                     }
-                } else if (secForMillion > 0 && pause) {
-                    drawPause(0,0);
+                    ClockGenerator.exitFlag = !flag;
+                    debugGo = false;
                 }
-                if (clockParameter % secForMillion == 0 || debugMode) {
-                    try {
-                        Thread.sleep(1);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+            } else if (secForMillion > 0 && pause) {
+                drawPause(0,0);
+            }
+            if (clockParameter % secForMillion == 0 || debugMode) {
+                try {
+                    Thread.sleep(1);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
             }
+        }
     }
 }

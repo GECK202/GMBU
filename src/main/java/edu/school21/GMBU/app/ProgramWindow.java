@@ -127,26 +127,26 @@ public class ProgramWindow extends Game implements ApplicationListener, InputPro
         }
         batch.begin();
 
-        font.draw(batch, "Time:", 5,475);
-        font.draw(batch, String.format("%.2f sec", currentFrame*updateDelay), 130, 475);
+        font.draw(batch, "Time:", 5,675);
+        font.draw(batch, String.format("%.2f sec", currentFrame*updateDelay), 130, 675);
 
-        font.draw(batch, "Current address:", 5, 450);
-        font.draw(batch,  clockS, 130, 450);
+        font.draw(batch, "Current address:", 5, 650);
+        font.draw(batch,  clockS, 130, 650);
 
-        font.draw(batch, "Max address:", 5, 425);
-        font.draw(batch, maxAddress, 130, 425);
+        font.draw(batch, "Max address:", 5, 625);
+        font.draw(batch, maxAddress, 130, 625);
 
-        font.draw(batch, "Current opcode:", 5, 400);
-        font.draw(batch,  curOpcodeName, 130, 400);
+        font.draw(batch, "Current opcode:", 5, 600);
+        font.draw(batch,  curOpcodeName, 130, 600);
 
-        font.draw(batch, "debug = ", 200, 475);
-        font.draw(batch, debugMode, 255, 475);
+        font.draw(batch, "debug = ", 5, 575);
+        font.draw(batch, debugMode, 130, 575);
 
-        font.draw(batch, "pause = ", 200, 450);
-        font.draw(batch, pause, 255, 450);
+        font.draw(batch, "pause = ", 5, 550);
+        font.draw(batch, pause, 130, 550);
 
-        font.draw(batch, "check = ", 200, 425);
-        font.draw(batch, check, 255, 425);
+        font.draw(batch, "check = ", 5, 525);
+        font.draw(batch, check, 130, 525);
 
         font.draw(batch, mem, 300, 675);
 
